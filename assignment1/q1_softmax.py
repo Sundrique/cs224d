@@ -23,7 +23,7 @@ def softmax(x):
     if len(x.shape) > 1:
         x -= np.max(x, axis=1).reshape((x.shape[0], 1))
         x = np.exp(x)
-        x /= np.sum(x, axis=1)
+        x /= np.sum(x, axis = 1).reshape((x.shape[0], 1))
     else:
         x -= np.max(x)
         x = np.exp(x)

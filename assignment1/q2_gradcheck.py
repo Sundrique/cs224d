@@ -19,12 +19,15 @@ def gradcheck_naive(f, x):
     while not it.finished:
         ix = it.multi_index
 
-        ### try modifying x[ix] with h defined above to compute numerical gradients
-        ### make sure you call random.setstate(rndstate) before calling f(x) each time, this will make it 
-        ### possible to test cost functions with built in randomness later
-        ### YOUR CODE HERE:
-        raise NotImplementedError
-        ### END YOUR CODE
+        x[ix] += h
+        random.setstate(rndstate)
+        fxp, _ = f(x)
+        x[ix] -=  2 * h
+        random.setstate(rndstate)
+        fxm, _ = f(x)
+        x[ix] += h
+
+        numgrad = (fxp - fxm) / (2 * h)
 
         # Compare gradients
         reldiff = abs(numgrad - grad[ix]) / max(1, abs(numgrad), abs(grad[ix]))
@@ -58,9 +61,27 @@ def your_sanity_checks():
     your additional tests be graded.
     """
     print "Running your sanity checks..."
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
+
+    cub = lambda x: (np.sum(x ** 3), 3 * (x ** 2))
+
+    gradcheck_naive(cub, np.array(123.456))      # scalar test
+    gradcheck_naive(cub, np.random.randn(3,))    # 1-D test
+    gradcheck_naive(cub, np.random.randn(4,5))   # 2-D test
+    print ""
+
+    exp = lambda x: (np.sum(np.exp(x)), np.exp(x))
+
+    gradcheck_naive(exp, np.array(123.456))  # scalar test
+    gradcheck_naive(exp, np.random.randn(3, ))  # 1-D test
+    gradcheck_naive(exp, np.random.randn(4, 5))  # 2-D test
+    print ""
+
+    complex = lambda x: (np.sum(x ** 2 + (1 / x)), x * 2 - (1 / (x **2)))
+
+    gradcheck_naive(complex, np.array(123.456))      # scalar test
+    gradcheck_naive(complex, np.random.randn(3,))    # 1-D test
+    gradcheck_naive(complex, np.random.randn(4,5))   # 2-D test
+    print ""
 
 if __name__ == "__main__":
     sanity_check()
