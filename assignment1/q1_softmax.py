@@ -63,9 +63,15 @@ def test_softmax():
     your tests be graded.
     """
     print "Running your tests..."
-    ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE  
+    test1 = softmax(np.array([1,1]))
+    print test1
+    assert np.amax(np.fabs(test1 - np.array(
+        [0.5,  0.5]))) <= 1e-6
+
+    test2 = softmax(np.array([11, 7, 8]))
+    print test2
+    assert np.amax(np.fabs(test2 - np.array(
+            [0.9362395518765056, 0.01714782554552039, 0.04661262257797389]))) <= 1e-6
 
 if __name__ == "__main__":
     test_softmax_basic()
