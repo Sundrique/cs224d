@@ -162,12 +162,19 @@ def cbow(currentWord, C, contextWords, tokens, inputVectors, outputVectors,
     # ASSIGNMENT ARE NOT!                                           #  
     #################################################################
     
-    cost = 0
-    gradIn = np.zeros(inputVectors.shape)
-    gradOut = np.zeros(outputVectors.shape)
 
     ### YOUR CODE HERE
-    #raise NotImplementedError
+
+    predicted = np.zeros((inputVectors.shape[1], ))
+    for ctx in contextWords:
+        predicted += inputVectors[tokens[ctx]]
+
+    cost, gIn, gradOut = word2vecCostAndGradient(predicted, tokens[currentWord], outputVectors, dataset)
+
+    gradIn = np.zeros(inputVectors.shape)
+    for ctx in contextWords:
+        idx = tokens[ctx]
+        gradIn[idx] += gIn
     ### END YOUR CODE
     
     return cost, gradIn, gradOut
